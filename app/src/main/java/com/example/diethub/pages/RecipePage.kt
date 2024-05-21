@@ -1,4 +1,4 @@
-package com.example.diethub
+package com.example.diethub.pages
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -20,9 +20,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.diethub.R
 
 @Composable
-fun Recipe() {
+fun Recipe(navController: NavController) {
     val scrollState = rememberScrollState()
     Column (modifier = Modifier
         .fillMaxSize()){

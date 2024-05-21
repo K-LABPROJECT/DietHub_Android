@@ -1,4 +1,4 @@
-package com.example.diethub
+package com.example.diethub.pages
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,6 +20,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.diethub.R
+import com.example.diethub.Screen
 
 @Composable
 fun Restaurant(navController: NavHostController) {
@@ -65,10 +68,13 @@ fun Restaurant(navController: NavHostController) {
                 .height(330.dp)
                 .clickable {navController.navigate("Recipe")},
             contentScale = ContentScale.FillBounds)
-        Image(
-            painter = painterResource(id = R.drawable.home),
-            contentDescription = "home button",
-            modifier = Modifier.size(50.dp)
-        )
+        IconButton(onClick = { navController.navigate(route = Screen.HomePage.route) }) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_button_home),
+                contentDescription = "Home",
+                modifier = Modifier
+                    .size(48.dp)
+            )
+        }
     }
 }
