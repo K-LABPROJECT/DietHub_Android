@@ -1,4 +1,4 @@
-package com.example.diethub
+package com.example.diethub.pages
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -45,24 +45,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.diethub.R
+import com.example.diethub.Screen
 
 class RankActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyApp()
+//            RankPage()
         }
     }
 }
 
 @Composable
-fun MyApp() {
+fun RankPage(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFFFD077)) // Light orange background color
     ) {
-        TopBar()
+        TopBar(navController = navController)
         Spacer(modifier = Modifier.height(12.dp))
         TopPodiumSection()
         Spacer(modifier = Modifier.height(16.dp))
@@ -76,7 +79,7 @@ fun MyApp() {
 }
 
 @Composable
-fun TopBar() {
+fun TopBar(navController: NavController) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -84,7 +87,11 @@ fun TopBar() {
         verticalAlignment = Alignment.CenterVertically
     ) {
         //홈버튼
-        IconButton(onClick = { /* todo: 홈버튼 클릭 이벤트 */ }) {
+        IconButton(onClick = { navController.navigate(route = Screen.HomePage.route){
+            popUpTo(Screen.HomePage.route){
+                inclusive = true
+            }
+        } }) {
             Image(
                 painter = painterResource(id = R.drawable.ic_button_home),
                 contentDescription = "Home",
@@ -212,7 +219,7 @@ data class Restaurant(val name: String, val rating: Double)
 @Preview(showBackground = true)
 @Composable
 fun MyAppPreview() {
-    MyApp()
+//    RankPage()
 }
 
 @Preview(showBackground = true)
