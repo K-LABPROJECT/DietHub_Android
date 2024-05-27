@@ -1,33 +1,65 @@
 package com.example.diethub.pages
 
+import android.graphics.drawable.Icon
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.diethub.R
 import com.example.diethub.Screen
 import com.example.diethub.UserViewModel
 
 @Composable
 fun HomePage(navController: NavController, userViewModel: UserViewModel) {
     Text("Home")
-    Column {
-        Button(onClick = { navController.navigate(Screen.MyPage.route) }) {
-            Text(text = "MyPage")
-        }
-        Button(onClick = { navController.navigate(Screen.RankPage.route) }) {
-            Text(text = "RankPage")
-        }
-        Button(onClick = { navController.navigate(Screen.RestaurantPage.route) }) {
-            Text(text = "RestaurantPage")
-        }
-        Button(onClick = { navController.navigate(Screen.RecipePage.route){
-            popUpTo(Screen.HomePage.route){
-                inclusive = true
+    Row (modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.Bottom){
+        Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.End) {
+            IconButton(onClick = { navController.navigate(Screen.MyPage.route) }) {
+                Image(
+                    painter = painterResource(id = R.drawable.my_button),
+                    contentDescription = "Home",
+                    modifier = Modifier
+                        .size(60.dp)
+                )
             }
-        } }) {
-            Text(text = "RecipePage")
-            /*TODO RecipePage는 RestaurantPage 내부에서 호출*/
+            IconButton(onClick = { navController.navigate(Screen.RankPage.route) }) {
+                Image(
+                    painter = painterResource(id = R.drawable.search_button),
+                    contentDescription = "Home",
+                    modifier = Modifier
+                        .size(60.dp)
+                )
+            }
+            IconButton(onClick = { navController.navigate(Screen.RestaurantPage.route) }) {
+                Image(
+                    painter = painterResource(id = R.drawable.menu_button),
+                    contentDescription = "Home",
+                    modifier = Modifier
+                        .size(60.dp)
+                )
+            }
+            Button(onClick = {
+                navController.navigate(Screen.RecipePage.route) {
+                    popUpTo(Screen.HomePage.route) {
+                        inclusive = true
+                    }
+                }
+            }) {
+                Text(text = "RecipePage(To be deleted)")
+                /*TODO RecipePage는 RestaurantPage 내부에서 호출*/
+            }
         }
     }
 
