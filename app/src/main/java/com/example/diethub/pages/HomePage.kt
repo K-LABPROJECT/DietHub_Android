@@ -30,6 +30,4 @@ fun HomePage(navController: NavController, userViewModel: UserViewModel) {
             /*TODO RecipePage는 RestaurantPage 내부에서 호출*/
         }
     }
-
-
 }
