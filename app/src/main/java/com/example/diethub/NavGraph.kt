@@ -1,10 +1,10 @@
 package com.example.diethub
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.diethub.pages.ChangeMySpec
 import com.example.diethub.pages.HomePage
 import com.example.diethub.pages.MyPage

@@ -1,3 +1,4 @@
+package com.example.diethub.pages
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
