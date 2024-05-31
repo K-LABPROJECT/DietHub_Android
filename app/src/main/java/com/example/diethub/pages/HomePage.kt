@@ -51,13 +51,23 @@ fun HomePage(navController: NavController, userViewModel: UserViewModel) {
                 )
             }
             Button(onClick = {
-                navController.navigate(Screen.RecipePage.route) {
+                navController.navigate(Screen.RecipePage.route+"/2/2") {
                     popUpTo(Screen.HomePage.route) {
-                        inclusive = true
+//                        inclusive = true
                     }
                 }
             }) {
                 Text(text = "RecipePage(To be deleted)")
+                /*TODO RecipePage는 RestaurantPage 내부에서 호출*/
+            }
+            Button(onClick = {
+                navController.navigate(Screen.RecipePage.route+"/1/1") {
+                    popUpTo(Screen.HomePage.route) {
+//                        inclusive = true
+                    }
+                }
+            }) {
+                Text(text = "RecipePage2(To be deleted)")
                 /*TODO RecipePage는 RestaurantPage 내부에서 호출*/
             }
         }
