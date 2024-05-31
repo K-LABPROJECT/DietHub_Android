@@ -15,14 +15,18 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +40,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -68,24 +73,18 @@ fun MyPage(navController: NavHostController, viewModel: UserViewModel) {
     ) {
         Spacer(modifier = Modifier.height(16.dp))
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            IconButton(onClick = {
-                navController.navigate(route = Screen.HomePage.route) {
-                    popUpTo(Screen.HomePage.route) {
-                        inclusive = true
-                    }
+        IconButton(onClick = {
+            navController.navigate(route = Screen.HomePage.route) {
+                popUpTo(Screen.HomePage.route) {
+                    inclusive = true
                 }
-            }) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_button_home),
-                    contentDescription = "Home",
-                    modifier = Modifier.size(48.dp)
-                )
             }
+        }) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_button_home),
+                contentDescription = "Home",
+                modifier = Modifier.size(48.dp)
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -173,7 +172,7 @@ fun MyPage(navController: NavHostController, viewModel: UserViewModel) {
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "내 목표 체중 ${userInfo.targetWeight}kg",
+                    text = "내 목표 체중 ${userInfo.targetWeight}kg, 내 시작 체중 ${userInfo.weight}kg",
                     fontSize = 12.sp,
                     color = Color(0xFF666666)
                 )
@@ -184,30 +183,16 @@ fun MyPage(navController: NavHostController, viewModel: UserViewModel) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(
-                        text = "키\n\n${userInfo.height}",
-                        fontSize = 14.sp,
-                        color = Color(0xFF666666),
-                        textAlign = TextAlign.Center
-                    )
-                    Text(
-                        text = "근육량\n\n${userInfo.muscleMass}kg",
-                        fontSize = 14.sp,
-                        color = Color(0xFF666666),
-                        textAlign = TextAlign.Center
-                    )
-                    Text(
-                        text = "몸무게\n\n${userInfo.weight}kg",
-                        fontSize = 14.sp,
-                        color = Color(0xFF666666),
-                        textAlign = TextAlign.Center
-                    )
-                    Text(
-                        text = "BMI\n\n${userInfo.bmi}",
-                        fontSize = 14.sp,
-                        color = Color(0xFF666666),
-                        textAlign = TextAlign.Center
-                    )
+                    UserInputField("키", "${userInfo.height}", "cm")
+                    UserInputField("현재\n몸무게", "${userInfo.weight}", "kg")
+                }
+
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    UserInputField("근육량", "${userInfo.muscleMass}", "kg")
+                    UserInputField("BMI", "${userInfo.bmi}", "")
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -282,6 +267,34 @@ fun ChangeMySpec(navController: NavHostController, viewModel: UserViewModel) {
         }) {
             Text("저장")
         }
+    }
+}
+
+@Composable
+fun UserInputField(label: String, initialValue: String, unit: String) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            text = label,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Black,
+            color = Color.Black,
+            modifier = Modifier.width(40.dp),
+            textAlign = TextAlign.Center
+        )
+        TextField(
+            value = remember { mutableStateOf("$initialValue $unit") }.value,
+            onValueChange = {},
+            singleLine = true,
+            textStyle = LocalTextStyle.current.copy(fontSize = 11.sp),
+            modifier = Modifier.width(100.dp),
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = Color.Transparent,
+                focusedContainerColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+        )
     }
 }
 
