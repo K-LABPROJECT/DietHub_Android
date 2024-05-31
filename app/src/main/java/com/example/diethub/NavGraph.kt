@@ -19,7 +19,7 @@ import com.example.diethub.pages.Restaurant
 fun NavGraph(navController: NavHostController, userViewModel: UserViewModel = viewModel()) {
     NavHost(navController = navController, startDestination = Screen.HomePage.route) {
         composable(Screen.MyPage.route) {
-            MyPage(navController = navController, viewModel = userViewModel)
+            MyPage(navController = navController, userviewModel = userViewModel)
         }
         composable(Screen.ChangeMySpec.route) {
             ChangeMySpec(navController = navController, viewModel = userViewModel)

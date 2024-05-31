@@ -19,5 +19,6 @@ interface ApiService {
         @Body recipe: Recipe
     ): Response<Unit>
 
-    //아래에 api 추가해주세요
+    @GET("members/{memberId}/info") // 마이페이지 정보 조회
+    suspend fun getMyinfo(@Path("memberId") memberId : Int) : MyInfo
 }
