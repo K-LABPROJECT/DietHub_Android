@@ -18,10 +18,10 @@ import com.example.diethub.pages.Recipe
 import com.example.diethub.pages.Restaurant
 
 @Composable
-fun NavGraph(navController: NavHostController, userViewModel: UserViewModel = viewModel()) {
-    NavHost(navController = navController, startDestination = Screen.LoginPage.route) {
+fun NavGraph(navController: NavHostController, userViewModel: UserViewModel = viewModel(), RestaurantViewModel: RestaurantViewModel = viewModel()) {
+    NavHost(navController = navController, startDestination = Screen.RestaurantPage.route) {
         composable(Screen.MyPage.route) {
-            MyPage(navController = navController, userviewModel = userViewModel)
+            MyPage(navController = navController, viewModel = userViewModel)
         }
         composable(Screen.ChangeMySpec.route) {
             ChangeMySpec(navController = navController, viewModel = userViewModel)
@@ -40,7 +40,7 @@ fun NavGraph(navController: NavHostController, userViewModel: UserViewModel = vi
             RankPage(navController = navController)
         }
         composable(route = Screen.RestaurantPage.route) {
-            Restaurant(navController = navController)
+            Restaurant(navController = navController, viewModel = RestaurantViewModel)
         }
         composable(route = Screen.HomePage.route){
             HomePage(navController = navController, userViewModel = userViewModel)

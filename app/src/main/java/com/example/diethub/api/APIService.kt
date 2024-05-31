@@ -21,4 +21,5 @@ interface ApiService {
 
     @GET("members/{memberId}/info") // 마이페이지 정보 조회
     suspend fun getMyinfo(@Path("memberId") memberId : Int) : MyInfo
+
 }
