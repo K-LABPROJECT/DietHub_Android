@@ -62,6 +62,4 @@ fun HomePage(navController: NavController, userViewModel: UserViewModel) {
             }
         }
     }
-
-
 }

@@ -1,8 +1,5 @@
 package com.example.diethub.pages
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -18,8 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -27,46 +23,41 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.diethub.R
 import com.example.diethub.Screen
 
-class RankActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-//            RankPage()
-        }
-    }
-}
 
 @Composable
 fun RankPage(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFFFD077)) // Light orange background color
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color(0xFF3A9AFC), Color(0xFFFFD077), Color(0xFFFFB36D), Color(0xFFFFB36D)
+                    ), startY = 0.0f, endY = Float.POSITIVE_INFINITY
+                )
+            )
     ) {
         TopBar(navController = navController)
-        Spacer(modifier = Modifier.height(12.dp))
         TopPodiumSection()
         Spacer(modifier = Modifier.height(16.dp))
         RestaurantList(
@@ -86,54 +77,55 @@ fun TopBar(navController: NavController) {
             .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        //홈버튼
-        IconButton(onClick = { navController.navigate(route = Screen.HomePage.route){
-            popUpTo(Screen.HomePage.route){
-                inclusive = true
+        IconButton(onClick = {
+            navController.navigate(route = Screen.HomePage.route) {
+                popUpTo(Screen.HomePage.route) {
+                    inclusive = true
+                }
             }
-        } }) {
+        }) {
             Image(
                 painter = painterResource(id = R.drawable.ic_button_home),
                 contentDescription = "Home",
-                modifier = Modifier
-                    .size(48.dp)
+                modifier = Modifier.size(48.dp)
             )
         }
 
         Spacer(modifier = Modifier.width(8.dp))
 
-        // Search Bar
         val searchText = remember { mutableStateOf(TextFieldValue("")) }
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 16.dp)
+                .shadow(4.dp, RoundedCornerShape(20.dp))
+                .background(Color.White, RoundedCornerShape(12.dp)),
             contentAlignment = Alignment.CenterStart
         ) {
-            TextField(
-                colors = TextFieldDefaults.colors(Color.White),
+            BasicTextField(
                 value = searchText.value,
                 onValueChange = { searchText.value = it },
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Search
-                ),
-                keyboardActions = KeyboardActions(onSearch = { /* Search action */ }),
                 singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
                 textStyle = LocalTextStyle.current.copy(
                     fontSize = 16.sp,
-                    textAlign = TextAlign.Start
+                    color = Color.Black
                 ),
-                modifier = Modifier.fillMaxWidth()
+                decorationBox = { innerTextField ->
+                    if (searchText.value.text.isEmpty()) {
+                        Text(
+                            text = "다른 사용자의 식당을 검색해보세요",
+                            color = Color.Gray,
+                            fontSize = 16.sp,
+                        )
+                    }
+                    innerTextField()
+                }
             )
-            if (searchText.value.text.isEmpty()) {
-                Text(
-                    text = "다른 사용자의 식당을 검색해보세요",
-                    color = Color.Gray,
-                    fontSize = 16.sp,
-                )
-            }
         }
     }
 }
@@ -160,7 +152,6 @@ fun RestaurantList(restaurants: List<Restaurant>) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFFFD077))
     ) {
         LazyColumn {
             items(restaurants) { restaurant ->
@@ -215,21 +206,10 @@ fun RestaurantListItem(restaurant: Restaurant) {
 
 data class Restaurant(val name: String, val rating: Double)
 
-// Preview Functions
-@Preview(showBackground = true)
-@Composable
-fun MyAppPreview() {
-//    RankPage()
-}
 
 @Preview(showBackground = true)
 @Composable
-fun TopPodiumSectionPreview() {
-    TopPodiumSection()
-}
-
-@Preview(showBackground = true)
-@Composable
-fun RestaurantListItemPreview() {
-    RestaurantListItem(restaurant = Restaurant("Preview Restaurant", 4.8))
+fun RankPagePreview() {
+    val navController = rememberNavController()
+    RankPage(navController)
 }
