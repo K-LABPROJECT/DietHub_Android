@@ -55,8 +55,8 @@ import kotlin.math.round
 
 @Composable
 fun MyPage(navController: NavHostController, viewModel: UserViewModel) {
-    val progress = 0.7f // 목표 달성률 (0.7 = 70%)
     val userInfo = viewModel.userInfo
+    val progress : Float = userInfo.targetWeight/userInfo.weight // 목표 달성률 (0.7 = 70%)
 
     Column(
         modifier = Modifier
@@ -235,7 +235,7 @@ fun ChangeMySpec(navController: NavHostController, viewModel: UserViewModel) {
 
         OutlinedTextField(
             value = newHeight.toString(),
-            onValueChange = { newHeight = it.toIntOrNull() ?: newHeight },
+            onValueChange = { newHeight = (it.toIntOrNull() ?: newHeight).toFloat() },
             label = { Text("키 (cm)") }
         )
 
@@ -243,7 +243,7 @@ fun ChangeMySpec(navController: NavHostController, viewModel: UserViewModel) {
 
         OutlinedTextField(
             value = newWeight.toString(),
-            onValueChange = { newWeight = it.toIntOrNull() ?: newWeight },
+            onValueChange = { newWeight = (it.toIntOrNull() ?: newWeight).toFloat() },
             label = { Text("몸무게 (kg)") }
         )
 
@@ -262,7 +262,7 @@ fun ChangeMySpec(navController: NavHostController, viewModel: UserViewModel) {
             var heightInMeters = newHeight / 100.0
             var bmi = newWeight / (heightInMeters * heightInMeters)
 
-            viewModel.userInfo = viewModel.userInfo.copy(height = newHeight, weight = newWeight, muscleMass = newMuscleMass, bmi = round(bmi*10)/10)
+            viewModel.userInfo = viewModel.userInfo.copy(height = newHeight, weight = newWeight, muscleMass = newMuscleMass, bmi = (round(bmi*10)/10).toFloat())
             navController.popBackStack()
         }) {
             Text("저장")
@@ -304,7 +304,6 @@ fun MyPagePreview() {
     val navController = rememberNavController()
     MyPage(navController = navController, viewModel = UserViewModel())
 }
-
 
 
 

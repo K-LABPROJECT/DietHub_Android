@@ -17,12 +17,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.example.diethub.Screen
 
 @Composable
-fun LoginPage() {
+fun LoginPage(navController: NavHostController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -51,7 +52,7 @@ fun LoginPage() {
 
             Spacer(modifier = Modifier.height(80.dp))
             Button(
-                onClick = { /* TODO: 카카오 로그인 */ },
+                onClick = { navController.navigate(Screen.SignupPage.route)},
                 modifier = Modifier
                     .fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
@@ -68,10 +69,4 @@ fun LoginPage() {
             Spacer(modifier = Modifier.weight(2f))
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewDietHubScreen() {
-    LoginPage()
 }

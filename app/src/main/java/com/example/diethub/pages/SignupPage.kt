@@ -22,12 +22,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.example.diethub.Screen
 
 @Composable
-fun DietHubForm() {
+fun DietHubForm(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -63,7 +64,9 @@ fun DietHubForm() {
         Spacer(modifier = Modifier.weight(1f))
 
         Button(
-            onClick = { /* TODO: 회원가입 완료 */ },
+            onClick = {
+                      navController.navigate(Screen.HomePage.route)
+            },
             modifier = Modifier
                 .fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
@@ -102,10 +105,4 @@ fun InputField(hint: String, unit: String) {
         ),
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewDietHubForm() {
-    DietHubForm()
 }

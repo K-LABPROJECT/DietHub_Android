@@ -17,6 +17,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -24,16 +25,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.diethub.R
+import com.example.diethub.RestaurantViewModel
 import com.example.diethub.Screen
 
 @Composable
-fun Restaurant(navController: NavController) {
+fun Restaurant(navController: NavController, viewModel: RestaurantViewModel) {
+    val restaurant = viewModel.restaurant.value
+
+    LaunchedEffect(true) {
+        viewModel.loadRestaurantInfo("1") // 예시 ID
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -92,7 +98,7 @@ fun Restaurant(navController: NavController) {
         ) {
 
             Text(
-                text = "안녕하세용",
+                text = restaurant?.title ?: "loading...",
                 fontSize = 14.sp,
                 color = Color.Black,
                 modifier = Modifier
@@ -123,11 +129,4 @@ fun Restaurant(navController: NavController) {
                 .align(Alignment.BottomCenter)
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PPPPreview() {
-    val navController = rememberNavController()
-    Restaurant(navController)
 }
