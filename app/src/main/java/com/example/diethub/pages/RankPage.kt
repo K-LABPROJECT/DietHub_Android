@@ -1,5 +1,6 @@
 package com.example.diethub.pages
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -38,14 +39,17 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.diethub.R
 import com.example.diethub.Screen
+import com.example.diethub.SearchViewModel
+import com.example.diethub.api.Restaurant
 
 
 @Composable
-fun RankPage(navController: NavController) {
+fun RankPage(navController: NavController, searchViewModel: SearchViewModel = viewModel()) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -57,20 +61,17 @@ fun RankPage(navController: NavController) {
                 )
             )
     ) {
-        TopBar(navController = navController)
+        TopBar(navController = navController, searchViewModel = searchViewModel)
         TopPodiumSection()
         Spacer(modifier = Modifier.height(16.dp))
         RestaurantList(
-            restaurants = listOf(
-                Restaurant("My Restaurant", 5.0),
-                Restaurant("0 kcal Restaurant+++++++++TT", 4.9)
-            )
+            restaurants = searchViewModel.searchResults
         )
     }
 }
 
 @Composable
-fun TopBar(navController: NavController) {
+fun TopBar(navController: NavController, searchViewModel: SearchViewModel) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -106,7 +107,10 @@ fun TopBar(navController: NavController) {
         ) {
             BasicTextField(
                 value = searchText.value,
-                onValueChange = { searchText.value = it },
+                onValueChange = {
+                    searchText.value = it;
+                    searchViewModel.searchRestaurant(searchText.value.text);
+                    Log.d("search", searchText.value.text)},
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -181,14 +185,9 @@ fun RestaurantListItem(restaurant: Restaurant) {
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = restaurant.name,
+                    text = restaurant.title,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = "⭐️ ${restaurant.rating} / 5.0",
-                    fontSize = 14.sp,
-                    color = Color.Gray
                 )
             }
             Button(
@@ -204,7 +203,7 @@ fun RestaurantListItem(restaurant: Restaurant) {
 
 }
 
-data class Restaurant(val name: String, val rating: Double)
+
 
 
 @Preview(showBackground = true)

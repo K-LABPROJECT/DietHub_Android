@@ -8,6 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.diethub.pages.AddRecipePage
 import com.example.diethub.pages.ChangeMySpec
 import com.example.diethub.pages.DietHubForm
 import com.example.diethub.pages.HomePage
@@ -20,7 +21,7 @@ import com.example.diethub.pages.Restaurant
 
 @Composable
 fun NavGraph(navController: NavHostController, userViewModel: UserViewModel = viewModel(), RestaurantViewModel: RestaurantViewModel = viewModel()) {
-    NavHost(navController = navController, startDestination = Screen.RestaurantPage.route) {
+    NavHost(navController = navController, startDestination = Screen.RestaurantPage.route+"/1") {
         composable(Screen.MyPage.route) {
             MyPage(navController = navController, viewModel = userViewModel)
         }
@@ -40,8 +41,12 @@ fun NavGraph(navController: NavHostController, userViewModel: UserViewModel = vi
         composable(route = Screen.RankPage.route){
             RankPage(navController = navController)
         }
-        composable(route = Screen.RestaurantPage.route) {
-            Restaurant(navController = navController, viewModel = RestaurantViewModel)
+        composable(route = Screen.RestaurantPage.route+"/{restaurantId}", arguments = listOf(
+            navArgument("restaurantId"){
+                type = NavType.IntType
+            }
+        )) {
+            Restaurant(navController = navController, viewModel = RestaurantViewModel, restaurantId = it.arguments!!.getInt("restaurantId"))
         }
         composable(route = Screen.HomePage.route){
             HomePage(navController = navController, userViewModel = userViewModel)
@@ -55,5 +60,13 @@ fun NavGraph(navController: NavHostController, userViewModel: UserViewModel = vi
         composable(route = Screen.RecipeListPage.route) {
             RecipeList(navController = navController, viewModel = RestaurantViewModel)
         }
+        composable(route = Screen.AddRecipePage.route+"/{restaurantId}", arguments = listOf(
+            navArgument("restaurantId"){
+                type = NavType.IntType
+            }
+        )) {
+            AddRecipePage(restaurantId = it.arguments!!.getInt("restaurantId"), navController = navController)
+        }
+
     }
 }

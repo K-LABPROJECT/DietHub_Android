@@ -42,7 +42,7 @@ fun HomePage(navController: NavController, userViewModel: UserViewModel) {
                         .size(60.dp)
                 )
             }
-            IconButton(onClick = { navController.navigate(Screen.RestaurantPage.route) }) {
+            IconButton(onClick = { navController.navigate(Screen.RestaurantPage.route+"/1") }) {
                 Image(
                     painter = painterResource(id = R.drawable.menu_button),
                     contentDescription = "Home",

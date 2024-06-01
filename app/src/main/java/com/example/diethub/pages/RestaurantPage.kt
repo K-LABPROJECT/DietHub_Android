@@ -34,11 +34,11 @@ import com.example.diethub.RestaurantViewModel
 import com.example.diethub.Screen
 
 @Composable
-fun Restaurant(navController: NavController, viewModel: RestaurantViewModel) {
+fun Restaurant(navController: NavController, viewModel: RestaurantViewModel, restaurantId : Int) {
     val restaurant = viewModel.restaurant.value
 
     LaunchedEffect(true) {
-        viewModel.loadRestaurantInfo("1") // 예시 ID
+        viewModel.loadRestaurantInfo("$restaurantId") // 예시 ID
     }
 
     Box(
@@ -132,5 +132,21 @@ fun Restaurant(navController: NavController, viewModel: RestaurantViewModel) {
                     navController.navigate(Screen.RecipeListPage.route)
                 }
         )
+        Button(
+            colors = ButtonDefaults.buttonColors(Color((0xFFFFD077))),
+            elevation = ButtonDefaults.buttonElevation(4.dp),
+            onClick = {
+                navController.navigate(Screen.AddRecipePage.route+"/$restaurantId")
+
+            },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(14.dp)
+        ) {
+            Text(
+                text = "레시피 추가",
+                color = Color.White
+            )
+        }
     }
 }

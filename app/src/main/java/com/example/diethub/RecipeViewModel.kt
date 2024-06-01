@@ -1,6 +1,7 @@
 package com.example.diethub
 
 import android.util.Log
+import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
@@ -14,6 +15,8 @@ class RecipeViewModel : ViewModel() {
     var recipe by mutableStateOf(Recipe("loading..","loading.."))
         private set
 
+    var success by mutableStateOf<Boolean?>(null)
+
     fun fetchRecipe(restaurantId: Int, recipeId : Int) {
         viewModelScope.launch {
             try {
@@ -25,5 +28,22 @@ class RecipeViewModel : ViewModel() {
                 e.printStackTrace()
             }
         }
+    }
+
+    fun addRecipe(restaurantId: Int, recipe: Recipe) : Boolean?{
+        viewModelScope.launch {
+            try {
+                Log.d("recipe add", "$restaurantId" + " ${recipe.recipeName} ${recipe.recipeDetail}")
+                val response = RetrofitInstance.api.addRecipe(restaurantId, recipe)
+                if (response.isSuccessful) {
+                    success = true
+                } else {
+                    success = false
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        return success
     }
 }
