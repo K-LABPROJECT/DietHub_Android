@@ -13,7 +13,7 @@ class RestaurantViewModel : ViewModel() {
     private val _restaurant = mutableStateOf<Restaurant?>(null)
     val restaurant: State<Restaurant?> = _restaurant
 
-    // 식당 정보를 로드하는 함수
+    // 식당 정보 로드하는 함수
     fun loadRestaurantInfo(restaurantId: String) {
         viewModelScope.launch {
             try {
