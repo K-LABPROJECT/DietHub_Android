@@ -15,6 +15,7 @@ import com.example.diethub.pages.LoginPage
 import com.example.diethub.pages.MyPage
 import com.example.diethub.pages.RankPage
 import com.example.diethub.pages.Recipe
+import com.example.diethub.pages.RecipeList
 import com.example.diethub.pages.Restaurant
 
 @Composable
@@ -50,6 +51,9 @@ fun NavGraph(navController: NavHostController, userViewModel: UserViewModel = vi
         }
         composable(route = Screen.SignupPage.route) {
             DietHubForm(navController = navController)
+        }
+        composable(route = Screen.RecipeListPage.route) {
+            RecipeList(navController = navController, viewModel = RestaurantViewModel)
         }
     }
 }

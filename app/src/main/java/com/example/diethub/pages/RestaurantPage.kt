@@ -2,6 +2,7 @@ package com.example.diethub.pages
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -127,6 +128,9 @@ fun Restaurant(navController: NavController, viewModel: RestaurantViewModel) {
                 .background(Color.White)
                 .height(LocalConfiguration.current.screenHeightDp.dp * 2 / 3)
                 .align(Alignment.BottomCenter)
+                .clickable {
+                    navController.navigate(Screen.RecipeListPage.route)
+                }
         )
     }
 }
