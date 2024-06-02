@@ -26,9 +26,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.diethub.R
 import com.example.diethub.RestaurantViewModel
 import com.example.diethub.Screen
@@ -115,23 +117,29 @@ fun Restaurant(navController: NavController, viewModel: RestaurantViewModel, res
             Image(
                 painter = painterResource(id = R.drawable.boy_character),
                 contentDescription = "Character",
-                modifier = Modifier.size(240.dp)
+                modifier = Modifier.size(180.dp)
             )
         }
 
-        Image(
-            painter = painterResource(id = R.drawable.restaurant_foods),
-            contentDescription = "Foods",
-            contentScale = ContentScale.Fit,
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
+                .padding(top = 260.dp)
                 .background(Color.White)
-                .height(LocalConfiguration.current.screenHeightDp.dp * 2 / 3)
-                .align(Alignment.BottomCenter)
-                .clickable {
-                    navController.navigate(Screen.RecipeListPage.route)
-                }
-        )
+
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.restaurant_foods),
+                contentDescription = "Foods",
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .align(Alignment.BottomCenter)
+                    .clickable {
+                        navController.navigate(Screen.RecipeListPage.route)
+                    }
+            )
+        }
         Button(
             colors = ButtonDefaults.buttonColors(Color((0xFFFFD077))),
             elevation = ButtonDefaults.buttonElevation(4.dp),
@@ -149,4 +157,14 @@ fun Restaurant(navController: NavController, viewModel: RestaurantViewModel, res
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun RestaurantPreview() {
+    Restaurant(
+        navController = rememberNavController(),
+        viewModel = RestaurantViewModel(),
+        restaurantId = 1
+    )
 }

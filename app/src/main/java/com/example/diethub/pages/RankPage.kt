@@ -50,6 +50,7 @@ import com.example.diethub.api.Restaurant
 
 @Composable
 fun RankPage(navController: NavController, searchViewModel: SearchViewModel = viewModel()) {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -99,7 +100,7 @@ fun TopBar(navController: NavController, searchViewModel: SearchViewModel) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(48.dp)
+                .height(40.dp)
                 .padding(horizontal = 16.dp)
                 .shadow(4.dp, RoundedCornerShape(20.dp))
                 .background(Color.White, RoundedCornerShape(12.dp)),
@@ -114,9 +115,9 @@ fun TopBar(navController: NavController, searchViewModel: SearchViewModel) {
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
                 textStyle = LocalTextStyle.current.copy(
-                    fontSize = 16.sp,
+                    fontSize = 11.sp,
                     color = Color.Black
                 ),
                 decorationBox = { innerTextField ->
@@ -124,7 +125,7 @@ fun TopBar(navController: NavController, searchViewModel: SearchViewModel) {
                         Text(
                             text = "다른 사용자의 식당을 검색해보세요",
                             color = Color.Gray,
-                            fontSize = 16.sp,
+                            fontSize = 11.sp,
                         )
                     }
                     innerTextField()

@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -58,6 +60,8 @@ fun MyPage(navController: NavHostController, viewModel: UserViewModel) {
     val userInfo = viewModel.userInfo
     val progress : Float = userInfo.targetWeight/userInfo.weight // 목표 달성률 (0.7 = 70%)
 
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -68,7 +72,9 @@ fun MyPage(navController: NavHostController, viewModel: UserViewModel) {
                     ), startY = 0.0f, endY = Float.POSITIVE_INFINITY
                 )
             )
-            .padding(16.dp),
+            .padding(16.dp)
+            .verticalScroll(scrollState)
+        ,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(16.dp))
@@ -151,10 +157,13 @@ fun MyPage(navController: NavHostController, viewModel: UserViewModel) {
             )
         }
 
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.height(100.dp))
 
         Card(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(320.dp)
+            ,
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(Color.White),
         ) {
