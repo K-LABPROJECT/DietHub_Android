@@ -7,4 +7,9 @@ sealed class Screen(val route: String) {
     object RecipePage : Screen("recipe_page")
     object RankPage : Screen("rank_page")
     object HomePage : Screen("home_page")
+    object LoginPage : Screen("login_page")
+    object SignupPage : Screen("signup_page")
+    object AddRecipePage : Screen("add_recipe_page")
+    object RecipeListPage : Screen("recipe_list_page")
+
 }

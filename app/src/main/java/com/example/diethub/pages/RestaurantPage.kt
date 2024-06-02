@@ -2,6 +2,7 @@ package com.example.diethub.pages
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -30,10 +32,17 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.diethub.R
+import com.example.diethub.RestaurantViewModel
 import com.example.diethub.Screen
 
 @Composable
-fun Restaurant(navController: NavController) {
+fun Restaurant(navController: NavController, viewModel: RestaurantViewModel, restaurantId : Int) {
+    val restaurant = viewModel.restaurant.value
+
+    LaunchedEffect(true) {
+        viewModel.loadRestaurantInfo("$restaurantId") // 예시 ID
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -92,7 +101,7 @@ fun Restaurant(navController: NavController) {
         ) {
 
             Text(
-                text = "안녕하세용",
+                text = restaurant?.title ?: "loading...",
                 fontSize = 14.sp,
                 color = Color.Black,
                 modifier = Modifier
@@ -108,26 +117,54 @@ fun Restaurant(navController: NavController) {
             Image(
                 painter = painterResource(id = R.drawable.boy_character),
                 contentDescription = "Character",
-                modifier = Modifier.size(240.dp)
+                modifier = Modifier.size(180.dp)
             )
         }
 
-        Image(
-            painter = painterResource(id = R.drawable.restaurant_foods),
-            contentDescription = "Foods",
-            contentScale = ContentScale.Fit,
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
+                .padding(top = 260.dp)
                 .background(Color.White)
-                .height(LocalConfiguration.current.screenHeightDp.dp * 2 / 3)
-                .align(Alignment.BottomCenter)
-        )
+
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.restaurant_foods),
+                contentDescription = "Foods",
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .align(Alignment.BottomCenter)
+                    .clickable {
+                        navController.navigate(Screen.RecipeListPage.route)
+                    }
+            )
+        }
+        Button(
+            colors = ButtonDefaults.buttonColors(Color((0xFFFFD077))),
+            elevation = ButtonDefaults.buttonElevation(4.dp),
+            onClick = {
+                navController.navigate(Screen.AddRecipePage.route+"/$restaurantId")
+
+            },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(14.dp)
+        ) {
+            Text(
+                text = "레시피 추가",
+                color = Color.White
+            )
+        }
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
-fun PPPPreview() {
-    val navController = rememberNavController()
-    Restaurant(navController)
+fun RestaurantPreview() {
+    Restaurant(
+        navController = rememberNavController(),
+        viewModel = RestaurantViewModel(),
+        restaurantId = 1
+    )
 }
