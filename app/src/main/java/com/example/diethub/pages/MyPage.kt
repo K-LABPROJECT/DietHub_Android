@@ -66,6 +66,10 @@ fun MyPage(navController: NavHostController, viewModel: UserViewModel) {
     val targetWeight = userInfo.let { it!!.targetWeight }
     val firstWeight = userInfo.let { it!!.firstWeight }
     val muscleMass = userInfo.let { it!!.muscleMass }
+    val daysUsed = viewModel.getDaysUsed()
+//    val createdAt = userInfo?.createdAt ?: LocalDate.now()
+//    val today = LocalDate.now()
+//    val daysUsed = createdAt.until(today, ChronoUnit.DAYS)
     val weightloss = firstWeight - weight
     val progress = targetWeight/ weight
     val heightInMeters = height / 100.0
@@ -107,7 +111,7 @@ fun MyPage(navController: NavHostController, viewModel: UserViewModel) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "DietHub와 ddddd일동안 함께했어요!", // date 받아오면 수정
+            text = "DietHub와 $daysUsed 일동안 함께했어요!", // date 받아오면 수정
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             color = Color.White,

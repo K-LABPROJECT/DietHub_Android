@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.diethub.api.MyInfo
 import com.example.diethub.api.RetrofitInstance
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class UserViewModel : ViewModel() {
         private val _myInfo = MutableLiveData<MyInfo>()
@@ -35,5 +37,13 @@ class UserViewModel : ViewModel() {
                                 muscleMass = muscleMass
                         )
                 }
+        }
+
+        fun getDaysUsed(): Long {
+                val currentInfo = _myInfo.value ?: return 0
+                val formatter = DateTimeFormatter.ISO_DATE
+                val createdAt = LocalDate.parse(currentInfo.createdAt, formatter)
+                val today = LocalDate.now()
+                return createdAt.until(today).days.toLong()
         }
 }

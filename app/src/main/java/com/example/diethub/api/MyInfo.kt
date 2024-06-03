@@ -12,5 +12,6 @@ data class MyInfo(
     @SerializedName("weightLoss") val weightLoss : Float,
     @SerializedName("followers") val followers : Int,
     @SerializedName("following") val following : Int,
-    @SerializedName("characterProfileId") val characterProfileId : Int
+    @SerializedName("characterProfileId") val characterProfileId : Int,
+    @SerializedName("createdAt") val createdAt : String
 )
