@@ -31,6 +31,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -52,13 +53,23 @@ import androidx.navigation.compose.rememberNavController
 import com.example.diethub.R
 import com.example.diethub.Screen
 import com.example.diethub.UserViewModel
-import kotlin.math.round
 
 
 @Composable
 fun MyPage(navController: NavHostController, viewModel: UserViewModel) {
-    val userInfo = viewModel.userInfo
-    val progress : Float = userInfo.targetWeight/userInfo.weight // 목표 달성률 (0.7 = 70%)
+    val userInfo by viewModel.myInfo.observeAsState()
+    val characterId = userInfo?.let { it.characterProfileId }
+    val followers = userInfo?.let { it.followers }
+    val following = userInfo?.let { it.following }
+    val weight = userInfo.let { it!!.weight }
+    val height = userInfo.let { it!!.height }
+    val targetWeight = userInfo.let { it!!.targetWeight }
+    val firstWeight = userInfo.let { it!!.firstWeight }
+    val muscleMass = userInfo.let { it!!.muscleMass }
+    val weightloss = firstWeight - weight
+    val progress = targetWeight/ weight
+    val heightInMeters = height / 100.0
+    val bmi = weight / (heightInMeters * heightInMeters)
 
     val scrollState = rememberScrollState()
 
@@ -96,7 +107,7 @@ fun MyPage(navController: NavHostController, viewModel: UserViewModel) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "DietHub와\n${userInfo.date}일동안 함께했어요!",
+            text = "DietHub와 ddddd일동안 함께했어요!", // date 받아오면 수정
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             color = Color.White,
@@ -115,7 +126,7 @@ fun MyPage(navController: NavHostController, viewModel: UserViewModel) {
                 modifier = Modifier.fillMaxSize()
             )
             Image(
-                painter = painterResource(id = R.drawable.img_mypage_character),
+                painter = painterResource(id = if(characterId == 0)R.drawable.boy_character else R.drawable.img_mypage_character),
                 contentDescription = "Character",
                 modifier = Modifier
                     .size(180.dp)
@@ -123,7 +134,7 @@ fun MyPage(navController: NavHostController, viewModel: UserViewModel) {
                     .background(Color.White)
             )
             Text(
-                text = "- ${userInfo.weightLoss}kg",
+                text = "- ${weightloss}kg",
                 fontSize = 14.sp,
                 color = Color(0xFF77A3E4),
                 modifier = Modifier
@@ -142,14 +153,14 @@ fun MyPage(navController: NavHostController, viewModel: UserViewModel) {
             modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround
         ) {
             Text(
-                text = "팔로워\n${userInfo.followers}",
+                text = "팔로워\n${followers}",
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF333333),
                 textAlign = TextAlign.Center
             )
             Text(
-                text = "팔로잉\n${userInfo.following}",
+                text = "팔로잉\n${following}",
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF333333),
@@ -172,7 +183,7 @@ fun MyPage(navController: NavHostController, viewModel: UserViewModel) {
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = "목표 체중까지 ${userInfo.weight - userInfo.targetWeight}kg 남았어요!",
+                    text = "목표 체중까지 ${weight - targetWeight}kg 남았어요!",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF333333)
@@ -181,7 +192,7 @@ fun MyPage(navController: NavHostController, viewModel: UserViewModel) {
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "내 목표 체중 ${userInfo.targetWeight}kg, 내 시작 체중 ${userInfo.firstWeight}kg",
+                    text = "내 목표 체중 ${targetWeight}kg, 내 시작 체중 ${firstWeight}kg",
                     fontSize = 12.sp,
                     color = Color(0xFF666666)
                 )
@@ -192,16 +203,16 @@ fun MyPage(navController: NavHostController, viewModel: UserViewModel) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    UserInputField("키", "${userInfo.height}", "cm")
-                    UserInputField("현재\n몸무게", "${userInfo.weight}", "kg")
+                    UserInputField("키", "${height}", "cm")
+                    UserInputField("현재\n몸무게", "${weight}", "kg")
                 }
 
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    UserInputField("근육량", "${userInfo.muscleMass}", "kg")
-                    UserInputField("BMI", "${userInfo.bmi}", "")
+                    UserInputField("근육량", "${muscleMass}", "kg")
+                    UserInputField("BMI", "${bmi}", "")
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -227,10 +238,10 @@ fun MyPage(navController: NavHostController, viewModel: UserViewModel) {
 
 @Composable
 fun ChangeMySpec(navController: NavHostController, viewModel: UserViewModel) {
-    val userInfo = viewModel.userInfo
-    var newHeight by remember { mutableStateOf(userInfo.height.toString()) }
-    var newWeight by remember { mutableStateOf(userInfo.weight.toString()) }
-    var newMuscleMass by remember { mutableStateOf(userInfo.muscleMass.toString()) }
+    val userInfo by viewModel.myInfo.observeAsState()
+    var newHeight by remember { mutableStateOf(userInfo?.height?.toString() ?: "") }
+    var newWeight by remember { mutableStateOf(userInfo?.weight?.toString() ?: "") }
+    var newMuscleMass by remember { mutableStateOf(userInfo?.muscleMass?.toString() ?: "") }
 
     Column(
         modifier = Modifier
@@ -273,17 +284,14 @@ fun ChangeMySpec(navController: NavHostController, viewModel: UserViewModel) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = {
-            val height = newHeight.toFloatOrNull() ?: userInfo.height
-            val weight = newWeight.toFloatOrNull() ?: userInfo.weight
-            val muscleMass = newMuscleMass.toFloatOrNull() ?: userInfo.muscleMass
-            val heightInMeters = height / 100.0
-            val bmi = weight / (heightInMeters * heightInMeters)
+            val height = newHeight.toFloatOrNull() ?: userInfo?.height ?: 0f
+            val weight = newWeight.toFloatOrNull() ?: userInfo?.weight ?: 0f
+            val muscleMass = newMuscleMass.toFloatOrNull() ?: userInfo?.muscleMass ?: 0f
 
-            viewModel.userInfo = viewModel.userInfo.copy(
+            viewModel.updateMyInfo(
                 height = height,
                 weight = weight,
-                muscleMass = muscleMass,
-                bmi = (round(bmi * 10) / 10).toFloat()
+                muscleMass = muscleMass
             )
             navController.popBackStack()
         }) {
