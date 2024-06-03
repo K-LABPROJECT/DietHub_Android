@@ -34,4 +34,9 @@ interface ApiService {
     @GET("members/{memberId}/info") // 마이페이지 정보 조회
     suspend fun getMyinfo(@Path("memberId") memberId : Int) : MyInfo
 
+    @PUT("members/{memberId}/info") // 마에피이지 정보 수정
+    suspend fun updateMyinfo(
+        @Path("memberId") memberId: Int,
+        @Body myInfo: MyInfo
+    ): Response<MyInfo>
 }

@@ -31,6 +31,7 @@ class RestaurantViewModel : ViewModel() {
         }
     }
 
+    // 레시피 삭제 함수
     fun deleteRecipe(restaurantId:Int, recipeId: Int){
         viewModelScope.launch {
             try {
