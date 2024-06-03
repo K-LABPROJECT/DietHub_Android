@@ -30,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -57,15 +58,19 @@ import com.example.diethub.UserViewModel
 
 @Composable
 fun MyPage(navController: NavHostController, viewModel: UserViewModel) {
+    LaunchedEffect(Unit) {
+        viewModel.fetchMyInfo()
+    }
+
     val userInfo by viewModel.myInfo.observeAsState()
     val characterId = userInfo?.let { it.characterProfileId }
     val followers = userInfo?.let { it.followers }
     val following = userInfo?.let { it.following }
-    val weight = userInfo.let { it!!.weight }
-    val height = userInfo.let { it!!.height }
-    val targetWeight = userInfo.let { it!!.targetWeight }
-    val firstWeight = userInfo.let { it!!.firstWeight }
-    val muscleMass = userInfo.let { it!!.muscleMass }
+    val weight = userInfo?.weight?:0f
+    val height = userInfo?.height?:0f
+    val targetWeight = userInfo?.targetWeight?:0f
+    val firstWeight = userInfo?.firstWeight?:0f
+    val muscleMass = userInfo?.muscleMass?:0f
     val daysUsed = viewModel.getDaysUsed()
 //    val createdAt = userInfo?.createdAt ?: LocalDate.now()
 //    val today = LocalDate.now()
@@ -74,7 +79,6 @@ fun MyPage(navController: NavHostController, viewModel: UserViewModel) {
     val progress = targetWeight/ weight
     val heightInMeters = height / 100.0
     val bmi = weight / (heightInMeters * heightInMeters)
-
     val scrollState = rememberScrollState()
 
     Column(
@@ -137,18 +141,32 @@ fun MyPage(navController: NavHostController, viewModel: UserViewModel) {
                     .clip(CircleShape)
                     .background(Color.White)
             )
-            Text(
-                text = "- ${weightloss}kg",
-                fontSize = 14.sp,
-                color = Color(0xFF77A3E4),
-                modifier = Modifier
-                    .width(80.dp)
-                    .align(Alignment.BottomCenter)
-                    .shadow(10.dp, shape = RoundedCornerShape(12.dp))
-                    .background(color = Color.White, shape = RoundedCornerShape(20.dp))
-                    .padding(vertical = 4.dp),
-                textAlign = TextAlign.Center,
-            )
+            if(weightloss>0)
+                Text(
+                    text = " -${weightloss}kg",
+                    fontSize = 14.sp,
+                    color = Color(0xFF77A3E4),
+                    modifier = Modifier
+                        .width(80.dp)
+                        .align(Alignment.BottomCenter)
+                        .shadow(10.dp, shape = RoundedCornerShape(12.dp))
+                        .background(color = Color.White, shape = RoundedCornerShape(20.dp))
+                        .padding(vertical = 4.dp),
+                    textAlign = TextAlign.Center,
+                )
+            else
+                Text(
+                    text = " +${-weightloss}kg",
+                    fontSize = 14.sp,
+                    color = Color(0xFF77A3E4),
+                    modifier = Modifier
+                        .width(80.dp)
+                        .align(Alignment.BottomCenter)
+                        .shadow(10.dp, shape = RoundedCornerShape(12.dp))
+                        .background(color = Color.White, shape = RoundedCornerShape(20.dp))
+                        .padding(vertical = 4.dp),
+                    textAlign = TextAlign.Center,
+                )
         }
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -297,7 +315,7 @@ fun ChangeMySpec(navController: NavHostController, viewModel: UserViewModel) {
                 weight = weight,
                 muscleMass = muscleMass
             )
-            navController.popBackStack()
+            navController.popBackStack() // 이전 화면으로 돌아가기
         }) {
             Text("저장")
         }

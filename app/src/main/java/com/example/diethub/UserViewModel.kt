@@ -17,7 +17,7 @@ class UserViewModel : ViewModel() {
                 fetchMyInfo()
         }
 
-        private fun fetchMyInfo() {
+        fun fetchMyInfo() {
                 viewModelScope.launch {
                         try {
                                 val response = RetrofitInstance.api.getMyinfo(memberId = 1) // memberId를 적절히 설정
@@ -31,13 +31,34 @@ class UserViewModel : ViewModel() {
         fun updateMyInfo(height: Float, weight: Float, muscleMass: Float) {
                 val currentInfo = _myInfo.value
                 if (currentInfo != null) {
-                        _myInfo.value = currentInfo.copy(
+                        val updatedInfo = currentInfo.copy(
                                 height = height,
                                 weight = weight,
                                 muscleMass = muscleMass
                         )
+                        _myInfo.value = updatedInfo
+                        updateMyInfoOnServer(updatedInfo)
                 }
         }
+
+        private fun updateMyInfoOnServer(updatedInfo: MyInfo) {
+                viewModelScope.launch {
+                        try {
+                                val response = RetrofitInstance.api.updateMyinfo(
+                                        memberId = 1, // memberId를 적절히 설정
+                                        myInfo = updatedInfo
+                                )
+                                if (response.isSuccessful) {
+                                        fetchMyInfo()
+                                } else {
+                                        // 에러 처리
+                                }
+                        } catch (e: Exception) {
+                                // 에러 처리
+                        }
+                }
+        }
+
 
         fun getDaysUsed(): Long {
                 val currentInfo = _myInfo.value ?: return 0
