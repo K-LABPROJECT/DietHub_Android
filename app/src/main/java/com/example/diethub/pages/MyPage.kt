@@ -172,7 +172,7 @@ fun MyPage(navController: NavHostController, viewModel: UserViewModel) {
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = "목표 체중까지 dddd 남았어요!",
+                    text = "목표 체중까지 ${userInfo.weight - userInfo.targetWeight}kg 남았어요!",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF333333)
@@ -181,7 +181,7 @@ fun MyPage(navController: NavHostController, viewModel: UserViewModel) {
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "내 목표 체중 ${userInfo.targetWeight}kg, 내 시작 체중 ${userInfo.weight}kg",
+                    text = "내 목표 체중 ${userInfo.targetWeight}kg, 내 시작 체중 ${userInfo.firstWeight}kg",
                     fontSize = 12.sp,
                     color = Color(0xFF666666)
                 )
@@ -228,9 +228,9 @@ fun MyPage(navController: NavHostController, viewModel: UserViewModel) {
 @Composable
 fun ChangeMySpec(navController: NavHostController, viewModel: UserViewModel) {
     val userInfo = viewModel.userInfo
-    var newHeight by remember { mutableStateOf(userInfo.height) }
-    var newWeight by remember { mutableStateOf(userInfo.weight) }
-    var newMuscleMass by remember { mutableStateOf(userInfo.muscleMass) }
+    var newHeight by remember { mutableStateOf(userInfo.height.toString()) }
+    var newWeight by remember { mutableStateOf(userInfo.weight.toString()) }
+    var newMuscleMass by remember { mutableStateOf(userInfo.muscleMass.toString()) }
 
     Column(
         modifier = Modifier
@@ -243,35 +243,48 @@ fun ChangeMySpec(navController: NavHostController, viewModel: UserViewModel) {
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
-            value = newHeight.toString(),
-            onValueChange = { newHeight = (it.toIntOrNull() ?: newHeight).toFloat() },
+            value = newHeight,
+            onValueChange = {
+                newHeight = it
+            },
             label = { Text("키 (cm)") }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
-            value = newWeight.toString(),
-            onValueChange = { newWeight = (it.toIntOrNull() ?: newWeight).toFloat() },
+            value = newWeight,
+            onValueChange = {
+                newWeight = it
+            },
             label = { Text("몸무게 (kg)") }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
-            value = newMuscleMass.toString(),
-            onValueChange = { newMuscleMass = it.toFloatOrNull() ?: newMuscleMass },
+            value = newMuscleMass,
+            onValueChange = {
+                newMuscleMass = it
+            },
             label = { Text("근육량 (kg)") }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = {
+            val height = newHeight.toFloatOrNull() ?: userInfo.height
+            val weight = newWeight.toFloatOrNull() ?: userInfo.weight
+            val muscleMass = newMuscleMass.toFloatOrNull() ?: userInfo.muscleMass
+            val heightInMeters = height / 100.0
+            val bmi = weight / (heightInMeters * heightInMeters)
 
-            var heightInMeters = newHeight / 100.0
-            var bmi = newWeight / (heightInMeters * heightInMeters)
-
-            viewModel.userInfo = viewModel.userInfo.copy(height = newHeight, weight = newWeight, muscleMass = newMuscleMass, bmi = (round(bmi*10)/10).toFloat())
+            viewModel.userInfo = viewModel.userInfo.copy(
+                height = height,
+                weight = weight,
+                muscleMass = muscleMass,
+                bmi = (round(bmi * 10) / 10).toFloat()
+            )
             navController.popBackStack()
         }) {
             Text("저장")
