@@ -4,5 +4,6 @@ import com.google.gson.annotations.SerializedName
 
 data class Recipe(
     @SerializedName("recipeName") val recipeName: String,
-    @SerializedName("recipeDetail") val recipeDetail: String
+    @SerializedName("recipeDetail") val recipeDetail: String,
+    @SerializedName("recipeIngredient") val recipeIngredient: String
 )

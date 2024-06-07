@@ -101,9 +101,7 @@ fun Recipe(navController: NavController, recipeViewModel: RecipeViewModel, resta
                         modifier = Modifier.padding(vertical = 8.dp),
                         horizontalArrangement = Arrangement.spacedBy(2.dp)  // Chip 간 간격을 2dp로 설정
                     ) {
-                        val ingredients = listOf(
-                            "토마토", "오이", "양파", "당근", "상추", "닭가슴살", "두부", "올리브", "아보카도", "드레싱"
-                        )
+                        val ingredients = recipe.recipeIngredient.split(",")
                         items(ingredients) { ingredient ->
                             AssistChip(onClick = { /* Do something */ },
                                 label = { Text(text = ingredient) })

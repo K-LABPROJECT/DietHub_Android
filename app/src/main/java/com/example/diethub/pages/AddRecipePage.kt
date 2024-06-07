@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -34,21 +35,32 @@ import com.example.diethub.api.Recipe
 fun AddRecipePage(viewModel: RecipeViewModel = viewModel(), navController: NavHostController, restaurantId: Int) {
     var recipeName by remember { mutableStateOf("") }
     var recipeDetail by remember { mutableStateOf("") }
+    var recipeIngredient by remember { mutableStateOf("") }
     var addRecipeResult : Boolean? = null
     val context = LocalContext.current
 
     Column(modifier = Modifier.padding(16.dp)) {
-        TextField(
+        OutlinedTextField(
             value = recipeName,
+            placeholder = { Text("ex) 건강 라면") },
             onValueChange = { recipeName = it },
             label = { Text("Recipe Name") },
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(8.dp))
-        TextField(
+        OutlinedTextField(
             value = recipeDetail,
+            placeholder = { Text("ex) 라면에 넣을 재료를 넣고 끓인다.") },
             onValueChange = { recipeDetail = it },
             label = { Text("Recipe Detail") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedTextField(
+            value = recipeIngredient,
+            placeholder = { Text("ex) 라면, 물, 소스") },
+            onValueChange = { recipeIngredient = it },
+            label = { Text("Recipe Ingredient") },
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -56,7 +68,7 @@ fun AddRecipePage(viewModel: RecipeViewModel = viewModel(), navController: NavHo
             onClick = {
                 addRecipeResult = viewModel.addRecipe(
                     restaurantId,
-                    Recipe(recipeName, recipeDetail)
+                    Recipe(recipeName, recipeDetail, recipeIngredient)
                 )
                 navController.popBackStack(route = Screen.RestaurantPage.route+"/$restaurantId", inclusive = false)
             },

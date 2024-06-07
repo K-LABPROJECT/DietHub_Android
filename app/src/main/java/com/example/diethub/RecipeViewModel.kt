@@ -12,7 +12,7 @@ import com.example.diethub.api.Recipe
 import com.example.diethub.api.RetrofitInstance
 
 class RecipeViewModel : ViewModel() {
-    var recipe by mutableStateOf(Recipe("loading..","loading.."))
+    var recipe by mutableStateOf(Recipe("loading..","loading..", "loading..."))
         private set
 
     var success by mutableStateOf<Boolean?>(null)
