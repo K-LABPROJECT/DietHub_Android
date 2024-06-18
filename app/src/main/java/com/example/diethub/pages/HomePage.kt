@@ -1,5 +1,6 @@
 package com.example.diethub.pages
 
+import android.content.Intent
 import android.graphics.drawable.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -69,6 +70,15 @@ fun HomePage(navController: NavController, userViewModel: UserViewModel) {
             }) {
                 Text(text = "RecipePage2(To be deleted)")
                 /*TODO RecipePage는 RestaurantPage 내부에서 호출*/
+            }
+
+            // 유니티 액티비티 호출을 위한 버튼 추가
+            Button(onClick = {
+                val context = navController.context
+                val intent = Intent(context, UnityPlayerActivity::class.java)
+                context.startActivity(intent)
+            }) {
+                Text(text = "Open Unity")
             }
         }
     }
